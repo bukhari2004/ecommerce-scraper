@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Clothing Scraper Dashboard</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0b1329; color: #f8fafc; margin: 0; padding: 2rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .search-box { display: flex; gap: 0.5rem; margin-top: 1.5rem; }
+    input[type="text"] { flex: 1; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #1e293b; background: #131d36; color: #fff; font-size: 1rem; }
+    button, .btn { padding: 0.75rem 1.25rem; border-radius: 8px; border: none; font-size: 0.95rem; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; }
+    .btn-search { background: #2563eb; color: #fff; }
+    .btn-export { background: #1e293b; color: #f8fafc; margin-left: 0.5rem; border: 1px solid #334155; }
+    .actions { display: flex; justify-content: space-between; align-items: center; margin: 1.5rem 0; }
+    table { width: 100%; border-collapse: collapse; background: #131d36; border-radius: 8px; overflow: hidden; }
+    th, td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid #1e293b; vertical-align: middle; }
+    th { background: #0b1329; font-weight: 600; color: #94a3b8; }
+    .badge { background: #2563eb; color: #fff; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.8rem; }
+    .thumb { width: 55px; height: 55px; object-fit: cover; border-radius: 6px; background: #1e293b; border: 1px solid #334155; }
+    .product-link { color: #60a5fa; text-decoration: none; font-weight: 500; }
+    .product-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Clothing Catalog Search</h1>
+    <p style="color: #94a3b8; margin: 0;">Search real-time clothing products from the AutomationExercise API</p>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search (e.g. jeans, dress, t-shirt, or leave empty for all)...">
+      <button class="btn btn-search" onclick="runSearch()">Search</button>
+    </div>
+
+    <div class="actions">
+      <span id="resultCount" style="color: #94a3b8;">No searches yet</span>
+      <div>
+        <a href="/export/csv" class="btn btn-export">Export CSV</a>
+        <a href="/export/excel" class="btn btn-export">Export Excel</a>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Price</th>
+          <th>Brand</th>
+          <th>Target</th>
+          <th>Category</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr><td colspan="8" style="text-align:center; color:#64748b;">Enter a search term and click Search</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    async function runSearch() {
+      const q = document.getElementById('searchInput').value;
+      const body = new FormData();
+      body.append('query', q);
+
+      const res = await fetch('/search', { method: 'POST', body });
+      const data = await res.json();
+
+      document.getElementById('resultCount').innerText = `Found ${data.count} products`;
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = '';
+
+      if (data.products.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No matching items found.</td></tr>';
+        return;
+      }
+
+      data.products.forEach(p => {
+        tbody.innerHTML += `
+          <tr>
+            <td>
+              <img src="${p.image_url}" alt="${p.title}" class="thumb" onerror="this.src='https://via.placeholder.com/55?text=No+Img'">
+            </td>
+            <td>${p.product_id}</td>
+            <td><strong>${p.title}</strong></td>
+            <td>Rs. ${p.price_inr}</td>
+            <td>${p.brand}</td>
+            <td><span class="badge">${p.user_type}</span></td>
+            <td>${p.category}</td>
+            <td>
+              <a href="${p.product_url}" target="_blank" class="product-link">View Store ↗</a>
+            </td>
+          </tr>
+        `;
+      });
+    }
+  </script>
+</body>
+</html>

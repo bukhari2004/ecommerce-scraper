@@ -3,7 +3,9 @@
 A modular end-to-end Python pipeline that extracts real-time product data from the [AutomationExercise](https://automationexercise.com) e-commerce catalog, cleans and validates the dataset, exports to CSV/Excel, and provides an interactive web dashboard and exploratory data analysis (EDA) notebook.
 
 ---
-
+## 🌐 Live Application
+- **Live Demo**: [https://ecommerce-scraper-nine.vercel.app/](https://ecommerce-scraper-nine.vercel.app/)
+- **Repository**: https://github.com/bukhari2004/ecommerce-scraper
 ## Features
 
 - **Automated Data Extraction:** Fetches full product listings including titles, prices, brands, categories, thumbnail images, and store URLs.

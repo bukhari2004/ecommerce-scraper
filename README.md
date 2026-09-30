@@ -4,7 +4,7 @@ A modular end-to-end Python pipeline that extracts real-time product data from t
 
 ---
 ## 🌐 Live Application
-- **Live Demo**: [https://ecommerce-scraper-nine.vercel.app/](https://ecommerce-scraper-nine.vercel.app/)
+- **Live Demo**: ecommerce-scraper-nine.vercel.app
 - **Repository**: https://github.com/bukhari2004/ecommerce-scraper
 ## Features
 
